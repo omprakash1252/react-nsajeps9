@@ -210,12 +210,9 @@ function LoginScreen({ onLogin }) {
       style={{
         position: 'fixed',
         inset: 0,
-        background: BG,
+        background: WHITE,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '24px 24px',
         fontFamily: "'Inter',sans-serif",
         overflowY: 'auto',
       }}
@@ -223,55 +220,64 @@ function LoginScreen({ onLogin }) {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        html,body{height:100%;margin:0;padding:0;background:${BG};font-family:'Inter',sans-serif}
+        html,body{height:100%;margin:0;padding:0;background:#fff;font-family:'Inter',sans-serif}
         input:focus{border-color:${NAVY} !important;box-shadow:0 0 0 3px ${NAVY}18 !important;outline:none}
       `}</style>
 
-      <div style={{ marginBottom: 32, textAlign: 'center' }}>
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            background: NAVY,
-            borderRadius: 9999,
-            padding: '12px 28px',
-            marginBottom: 10,
-          }}
-        >
-          <span style={{ color: WHITE, fontWeight: 700, fontSize: 22 }}>my</span>
-          <span style={{ color: GOLD, fontWeight: 800, fontSize: 22 }}>pallet</span>
-        </div>
-        <div style={{ fontSize: 13, color: GRAY }}>Cold Storages LLP · Staff Portal</div>
-      </div>
+      {/* Scrollable content area */}
+      <div style={{ flex: 1, padding: '20px 28px 120px' }}>
 
-      <div
-        style={{
-          width: '100%',
-          maxWidth: 400,
-          background: WHITE,
-          borderRadius: 24,
-          padding: '28px 24px',
-          boxShadow: '0 8px 32px rgba(11,24,41,0.10)',
-          border: `1px solid ${BORDER}`,
-        }}
-      >
         {step === 'phone' ? (
           <>
-            <div style={{ fontSize: 20, fontWeight: 800, color: NAVY, marginBottom: 4 }}>Sign In</div>
-            <div style={{ fontSize: 13, color: GRAY, marginBottom: 24 }}>
-              Enter your registered mobile number
+            {/* Logo pill */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                background: NAVY,
+                borderRadius: 9999,
+                padding: '10px 22px',
+                marginBottom: 48,
+              }}
+            >
+              <span style={{ color: WHITE, fontWeight: 700, fontSize: 18 }}>my</span>
+              <span style={{ color: GOLD, fontWeight: 800, fontSize: 18 }}>pallet</span>
             </div>
 
-            <span style={S.lbl}>Mobile Number</span>
-            <div style={{ position: 'relative', marginBottom: 16 }}>
+            {/* Icon */}
+            <div
+              style={{
+                width: 72,
+                height: 72,
+                borderRadius: 20,
+                background: `${GOLD}22`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 36,
+                marginBottom: 28,
+              }}
+            >
+              📱
+            </div>
+
+            <div style={{ fontSize: 28, fontWeight: 800, color: NAVY, marginBottom: 8, lineHeight: 1.2 }}>
+              What's your<br />mobile number?
+            </div>
+            <div style={{ fontSize: 15, color: GRAY, marginBottom: 36 }}>
+              We'll check if you have an account
+            </div>
+
+            {/* Input */}
+            <div style={{ position: 'relative' }}>
               <span
                 style={{
                   position: 'absolute',
-                  left: 14,
+                  left: 16,
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: GRAY,
-                  fontSize: 13,
+                  color: NAVY,
+                  fontSize: 15,
                   fontWeight: 600,
                   pointerEvents: 'none',
                 }}
@@ -279,7 +285,15 @@ function LoginScreen({ onLogin }) {
                 +91
               </span>
               <input
-                style={{ ...S.inp, paddingLeft: 46 }}
+                style={{
+                  ...S.inp,
+                  paddingLeft: 50,
+                  fontSize: 16,
+                  padding: '16px 16px 16px 50px',
+                  borderRadius: 14,
+                  border: `1.5px solid ${IBORDER}`,
+                  background: BG,
+                }}
                 placeholder="98765 43210"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
@@ -290,69 +304,50 @@ function LoginScreen({ onLogin }) {
             </div>
 
             {error && (
-              <div
-                style={{
-                  background: '#FEF2F2',
-                  border: '1px solid #FCA5A5',
-                  borderRadius: 12,
-                  padding: '10px 14px',
-                  fontSize: 12,
-                  color: '#DC2626',
-                  marginBottom: 14,
-                }}
-              >
+              <div style={{ fontSize: 13, color: '#DC2626', marginTop: 10 }}>
                 {error}
               </div>
             )}
-
-            <button
-              onClick={sendOtp}
-              style={{
-                width: '100%',
-                padding: '14px 0',
-                border: 'none',
-                borderRadius: 9999,
-                background: GOLD,
-                color: NAVY,
-                fontWeight: 800,
-                fontSize: 15,
-                fontFamily: "'Inter',sans-serif",
-                cursor: 'pointer',
-              }}
-            >
-              Send OTP →
-            </button>
           </>
         ) : (
           <>
+            {/* Back button */}
             <button
-              onClick={() => {
-                setStep('phone');
-                setOtp('');
-                setError('');
-                setGenerated(null);
-              }}
+              onClick={() => { setStep('phone'); setOtp(''); setError(''); setGenerated(null); }}
               style={{
-                background: 'none',
-                border: 'none',
-                color: GRAY,
-                fontSize: 13,
-                padding: 0,
-                marginBottom: 16,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                cursor: 'pointer',
+                background: 'none', border: 'none', color: NAVY, fontSize: 22,
+                padding: '0 0 48px 0', display: 'block', cursor: 'pointer',
                 fontFamily: "'Inter',sans-serif",
               }}
             >
-              ← Back
+              ←
             </button>
-            <div style={{ fontSize: 20, fontWeight: 800, color: NAVY, marginBottom: 4 }}>Enter OTP</div>
-            <div style={{ fontSize: 13, color: GRAY, marginBottom: 20 }}>
-              Code sent to +91 {phone}
+
+            {/* Icon */}
+            <div
+              style={{
+                width: 72,
+                height: 72,
+                borderRadius: 20,
+                background: `${GOLD}22`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 36,
+                marginBottom: 28,
+              }}
+            >
+              🔐
             </div>
 
+            <div style={{ fontSize: 28, fontWeight: 800, color: NAVY, marginBottom: 8, lineHeight: 1.2 }}>
+              Enter your OTP
+            </div>
+            <div style={{ fontSize: 15, color: GRAY, marginBottom: 36 }}>
+              Sent to +91 {phone}
+            </div>
+
+            {/* OTP preview */}
             {generated && (
               <div
                 style={{
@@ -360,44 +355,35 @@ function LoginScreen({ onLogin }) {
                   border: '1px solid #86EFAC',
                   borderRadius: 14,
                   padding: '14px 16px',
-                  marginBottom: 20,
+                  marginBottom: 24,
                 }}
               >
-                <div
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    color: '#16A34A',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                    marginBottom: 6,
-                  }}
-                >
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#16A34A', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 6 }}>
                   📱 SMS Preview (Demo Mode)
                 </div>
-                <div style={{ fontSize: 13, color: '#15803D' }}>
+                <div style={{ fontSize: 14, color: '#15803D' }}>
                   Your MyPallet OTP:{' '}
-                  <span style={{ fontWeight: 800, fontSize: 24, letterSpacing: 5 }}>
+                  <span style={{ fontWeight: 800, fontSize: 26, letterSpacing: 6 }}>
                     {generated.code}
                   </span>
-                </div>
-                <div style={{ fontSize: 10, color: '#86EFAC', marginTop: 4 }}>
-                  Valid for 5 minutes. Do not share.
                 </div>
               </div>
             )}
 
-            <span style={S.lbl}>OTP Code</span>
+            {/* OTP input */}
             <input
               style={{
                 ...S.inp,
-                letterSpacing: 10,
-                fontSize: 22,
+                letterSpacing: 12,
+                fontSize: 28,
                 fontWeight: 700,
                 textAlign: 'center',
-                marginBottom: 16,
+                padding: '18px 16px',
+                borderRadius: 14,
+                border: `1.5px solid ${IBORDER}`,
+                background: BG,
               }}
-              placeholder="• • • • • •"
+              placeholder="· · · · · ·"
               value={otp}
               onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
               onKeyDown={(e) => e.key === 'Enter' && verifyOtp()}
@@ -406,47 +392,47 @@ function LoginScreen({ onLogin }) {
             />
 
             {error && (
-              <div
-                style={{
-                  background: '#FEF2F2',
-                  border: '1px solid #FCA5A5',
-                  borderRadius: 12,
-                  padding: '10px 14px',
-                  fontSize: 12,
-                  color: '#DC2626',
-                  marginBottom: 14,
-                }}
-              >
+              <div style={{ fontSize: 13, color: '#DC2626', marginTop: 10 }}>
                 {error}
               </div>
             )}
-
-            <button
-              onClick={verifyOtp}
-              style={{
-                width: '100%',
-                padding: '14px 0',
-                border: 'none',
-                borderRadius: 9999,
-                background: otp.length === 6 ? GOLD : LGRAY,
-                color: NAVY,
-                fontWeight: 800,
-                fontSize: 15,
-                fontFamily: "'Inter',sans-serif",
-                cursor: otp.length === 6 ? 'pointer' : 'not-allowed',
-                transition: 'background 0.2s',
-              }}
-            >
-              Verify & Sign In →
-            </button>
           </>
         )}
       </div>
 
-      <div style={{ marginTop: 20, fontSize: 11, color: LGRAY, textAlign: 'center', lineHeight: 1.8 }}>
-        Only registered staff can sign in.
-        <br />
-        Contact management to get access.
+      {/* CTA button pinned to bottom */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          padding: '16px 28px 36px',
+          background: WHITE,
+          borderTop: `1px solid ${BORDER}`,
+        }}
+      >
+        <button
+          onClick={step === 'phone' ? sendOtp : verifyOtp}
+          style={{
+            width: '100%',
+            padding: '17px 0',
+            border: 'none',
+            borderRadius: 9999,
+            background: step === 'otp' && otp.length < 6 ? LGRAY : GOLD,
+            color: NAVY,
+            fontWeight: 800,
+            fontSize: 16,
+            fontFamily: "'Inter',sans-serif",
+            cursor: step === 'otp' && otp.length < 6 ? 'not-allowed' : 'pointer',
+            transition: 'background 0.2s',
+          }}
+        >
+          {step === 'phone' ? 'Send OTP' : 'Verify & Sign In'}
+        </button>
+        <div style={{ textAlign: 'center', fontSize: 12, color: LGRAY, marginTop: 12 }}>
+          Only registered staff can sign in
+        </div>
       </div>
     </div>
   );
