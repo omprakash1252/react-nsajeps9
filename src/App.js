@@ -222,10 +222,11 @@ function LoginScreen({ onLogin }) {
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         html,body{height:100%;margin:0;padding:0;background:#fff;font-family:'Inter',sans-serif}
         input:focus{border-color:${NAVY} !important;box-shadow:0 0 0 3px ${NAVY}18 !important;outline:none}
+        .login-cta{padding-bottom:calc(28px + env(safe-area-inset-bottom,16px)) !important}
       `}</style>
 
       {/* Scrollable content area */}
-      <div style={{ flex: 1, padding: '20px 28px 120px' }}>
+      <div style={{ flex: 1, padding: '20px 28px 140px' }}>
 
         {step === 'phone' ? (
           <>
@@ -402,12 +403,13 @@ function LoginScreen({ onLogin }) {
 
       {/* CTA button pinned to bottom */}
       <div
+        className="login-cta"
         style={{
           position: 'fixed',
           bottom: 0,
           left: 0,
           right: 0,
-          padding: '16px 28px 36px',
+          padding: '16px 28px 28px',
           background: WHITE,
           borderTop: `1px solid ${BORDER}`,
         }}
