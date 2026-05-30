@@ -96,6 +96,7 @@ const ROLE_BG = { superadmin: '#F5F3FF', admin: '#EFF6FF', staff: '#ECFDF5' };
 
 const DEFAULT_USERS = [
   { phone: '9542437555', name: 'Omprakash', role: 'superadmin' },
+  { phone: '7674066383', name: 'Omprakash', role: 'superadmin' },
   { phone: '9000000001', name: 'Admin User', role: 'admin' },
   { phone: '9000000002', name: 'Staff Member', role: 'staff' },
 ];
@@ -207,20 +208,22 @@ function LoginScreen({ onLogin }) {
   return (
     <div
       style={{
-        minHeight: '100vh',
+        position: 'fixed',
+        inset: 0,
         background: BG,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 24,
+        padding: '24px 24px',
         fontFamily: "'Inter',sans-serif",
+        overflowY: 'auto',
       }}
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        body{background:${BG};font-family:'Inter',sans-serif}
+        html,body{height:100%;margin:0;padding:0;background:${BG};font-family:'Inter',sans-serif}
         input:focus{border-color:${NAVY} !important;box-shadow:0 0 0 3px ${NAVY}18 !important;outline:none}
       `}</style>
 
@@ -244,10 +247,10 @@ function LoginScreen({ onLogin }) {
       <div
         style={{
           width: '100%',
-          maxWidth: 380,
+          maxWidth: 400,
           background: WHITE,
           borderRadius: 24,
-          padding: 28,
+          padding: '28px 24px',
           boxShadow: '0 8px 32px rgba(11,24,41,0.10)',
           border: `1px solid ${BORDER}`,
         }}
@@ -1149,8 +1152,14 @@ export default function App() {
   const [sessionChecked, setSessionChecked] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem('mp:users')) {
+    // Seed users, merging in any new defaults not already present
+    const existing = (() => { try { return JSON.parse(localStorage.getItem('mp:users') || 'null'); } catch { return null; } })();
+    if (!existing) {
       localStorage.setItem('mp:users', JSON.stringify(DEFAULT_USERS));
+    } else {
+      const merged = [...existing];
+      DEFAULT_USERS.forEach(d => { if (!merged.find(u => u.phone === d.phone)) merged.push(d); });
+      localStorage.setItem('mp:users', JSON.stringify(merged));
     }
     try {
       const s = localStorage.getItem('mp:session');
