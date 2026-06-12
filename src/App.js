@@ -1135,7 +1135,7 @@ function HandlingSection({ label, enabled, boxes, rate, lumpSum, onChange }) {
 }
 
 // ── Root App ──────────────────────────────────────────────
-export default function App() {
+function MyPalletApp() {
   const [currentUser, setCurrentUser] = useState(null);
   const [sessionChecked, setSessionChecked] = useState(false);
 
@@ -2329,4 +2329,232 @@ function MainApp({ currentUser, onLogout }) {
       </div>
     </>
   );
+}
+
+// ── SparkleIcon ───────────────────────────────────────────
+function SparkleIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
+      <path d="M10 1L11 9L19 10L11 11L10 19L9 11L1 10L9 9Z" fill="white" />
+    </svg>
+  );
+}
+
+// ── IsometricBoxSVG ───────────────────────────────────────
+function IsometricBoxSVG() {
+  const S = 13, OX = 100, OY = 100;
+  const iso = (x, y, z) => ({
+    x: OX + (x - y) * S * 0.866,
+    y: OY + (x + y) * S * 0.5 - z * S,
+  });
+  const pt = (p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`;
+  const C1 = 'rgba(255,255,255,0.85)';
+  const C2 = 'rgba(255,255,255,0.42)';
+  const BW = 6, BD = 6, BH = 4;
+
+  const seg = (p1, p2, c, w, k) => (
+    <line key={k} x1={p1.x.toFixed(1)} y1={p1.y.toFixed(1)}
+      x2={p2.x.toFixed(1)} y2={p2.y.toFixed(1)}
+      stroke={c} strokeWidth={w} strokeLinecap="round" />
+  );
+  const poly = (pts, c, w, k) => (
+    <polygon key={k} points={pts.map(pt).join(' ')}
+      fill="none" stroke={c} strokeWidth={w} strokeLinejoin="round" />
+  );
+
+  const v = {
+    a: iso(0,0,0), b: iso(BW,0,0), c: iso(BW,BD,0), d: iso(0,BD,0),
+    e: iso(0,0,BH), f: iso(BW,0,BH), g: iso(BW,BD,BH), h: iso(0,BD,BH),
+  };
+
+  const grid = [];
+  for (let i = 1; i < BW; i++) grid.push(seg(iso(i,0,BH), iso(i,BD,BH), C2, 0.9, `gx${i}`));
+  for (let j = 1; j < BD; j++) grid.push(seg(iso(0,j,BH), iso(BW,j,BH), C2, 0.9, `gy${j}`));
+
+  const iX=1, iY=1, iW=4, iD=4, iH=2.5;
+  const iv = {
+    a: iso(iX,iY,iH), b: iso(iX+iW,iY,iH),
+    c: iso(iX+iW,iY+iD,iH), d: iso(iX,iY+iD,iH),
+    e: iso(iX,iY,0), f: iso(iX+iW,iY,0),
+    g: iso(iX+iW,iY+iD,0), h: iso(iX,iY+iD,0),
+  };
+
+  const colH = 1.8;
+  const corners = [[0,0],[BW,0],[0,BD],[BW,BD]];
+
+  return (
+    <svg viewBox="0 20 200 185" width="100%" height="100%">
+      {poly([v.b, v.c, v.g, v.f], C1, 1.7, 'rf')}
+      {poly([v.d, v.c, v.g, v.h], C1, 1.7, 'lf')}
+      {poly([v.e, v.f, v.g, v.h], C1, 1.7, 'tf')}
+      {grid}
+      {[['a','e'],['b','f'],['c','g'],['d','h']].map(([s,t],i) => seg(v[s], v[t], C1, 1.7, `ve${i}`))}
+      {seg(v.a, v.b, C1, 1.7, 'be1')}
+      {seg(v.a, v.d, C1, 1.7, 'be2')}
+      {seg(v.b, v.c, C1, 1.7, 'be3')}
+      {seg(v.d, v.c, C1, 1.7, 'be4')}
+      {poly([iv.a, iv.b, iv.c, iv.d], C2, 1.0, 'itp')}
+      {[['e','a'],['f','b'],['g','c'],['h','d']].map(([s,t],i) => seg(iv[s], iv[t], C2, 1.0, `ive${i}`))}
+      {seg(iv.e, iv.f, C2, 1.0, 'ib1')}
+      {seg(iv.e, iv.h, C2, 1.0, 'ib2')}
+      {seg(iv.f, iv.g, C2, 1.0, 'ib3')}
+      {seg(iv.h, iv.g, C2, 1.0, 'ib4')}
+      {corners.map(([cx,cy],i) => seg(iso(cx,cy,BH), iso(cx,cy,BH+colH), C1, 1.7, `col${i}`))}
+    </svg>
+  );
+}
+
+// ── AgenticTradingScreen ──────────────────────────────────
+function AgenticTradingScreen() {
+  const [activeTab, setActiveTab] = useState('agentic');
+  const [activeNav, setActiveNav] = useState('chart');
+
+  const TABS = ['Agentic', 'Banking', 'Custodial', 'Retirement', 'Credit'];
+  const FEATURES = [
+    { title: 'Let your agent trade', desc: 'Connect an AI agent to our MCP so it can analyze the markets and trade.' },
+    { title: 'Designed for safety', desc: 'Your agent trades in a dedicated account separate from the rest of your portfolio.' },
+    { title: 'Track every move', desc: 'Get notified when your agent trades and monitor performance in the app.' },
+  ];
+
+  const navIcon = (id) => {
+    const clr = activeNav === id ? '#fff' : 'rgba(255,255,255,0.38)';
+    if (id === 'chart') return (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <polyline points="2,17 7,10 11,13 16,5 20,7"
+          stroke={clr} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+    if (id === 'target') return (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <circle cx="11" cy="11" r="8.5" stroke={clr} strokeWidth="1.8" />
+        <circle cx="11" cy="11" r="4.5" stroke={clr} strokeWidth="1.8" />
+        <circle cx="11" cy="11" r="1.5" fill={clr} />
+      </svg>
+    );
+    if (id === 'search') return (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <circle cx="9.5" cy="9.5" r="6" stroke={clr} strokeWidth="1.8" />
+        <line x1="14" y1="14" x2="19.5" y2="19.5" stroke={clr} strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    );
+    return (
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <circle cx="11" cy="7.5" r="3.5" stroke={clr} strokeWidth="1.8" />
+        <path d="M3.5,19 C3.5,15 6.9,11.5 11,11.5 C15.1,11.5 18.5,15 18.5,19"
+          stroke={clr} strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    );
+  };
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        html,body{background:#000;font-family:'Inter',sans-serif}
+        .at-tabs::-webkit-scrollbar{display:none}
+        .at-tabs{-ms-overflow-style:none;scrollbar-width:none}
+      `}</style>
+      <div style={{
+        background: '#000', minHeight: '100vh',
+        fontFamily: "'Inter',sans-serif", color: '#fff',
+        display: 'flex', flexDirection: 'column',
+        maxWidth: 480, margin: '0 auto', position: 'relative',
+      }}>
+        {/* Tab bar */}
+        <div className="at-tabs" style={{ display: 'flex', overflowX: 'auto', padding: '56px 20px 0', gap: 28 }}>
+          {TABS.map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab.toLowerCase())} style={{
+              background: 'none', border: 'none',
+              color: activeTab === tab.toLowerCase() ? '#fff' : 'rgba(255,255,255,0.38)',
+              fontSize: 15, fontWeight: activeTab === tab.toLowerCase() ? 700 : 500,
+              fontFamily: "'Inter',sans-serif", cursor: 'pointer',
+              whiteSpace: 'nowrap', paddingBottom: 14,
+              borderBottom: activeTab === tab.toLowerCase()
+                ? '2px solid rgba(255,255,255,0.85)'
+                : '2px solid transparent',
+            }}>
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Scrollable content */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '8px 28px 132px', overflowY: 'auto' }}>
+          {/* Isometric illustration */}
+          <div style={{ width: 230, height: 165, marginBottom: 4 }}>
+            <IsometricBoxSVG />
+          </div>
+
+          {/* Beta badge */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 7,
+            background: '#1c1c1e', borderRadius: 9999, padding: '6px 16px 6px 10px', marginBottom: 20,
+          }}>
+            <div style={{
+              width: 19, height: 19, borderRadius: '50%', background: 'rgba(255,255,255,0.14)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 11, color: '#fff', fontWeight: 700,
+            }}>i</div>
+            <span style={{ fontSize: 14, color: '#fff', fontWeight: 600 }}>Beta</span>
+          </div>
+
+          {/* Title */}
+          <h1 style={{
+            fontSize: 34, fontWeight: 700, color: '#fff',
+            textAlign: 'center', lineHeight: 1.15,
+            marginBottom: 36, letterSpacing: '-0.5px',
+          }}>
+            Introducing<br />agentic trading
+          </h1>
+
+          {/* Features */}
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 26, marginBottom: 44 }}>
+            {FEATURES.map(item => (
+              <div key={item.title} style={{ display: 'flex', gap: 18, alignItems: 'flex-start' }}>
+                <SparkleIcon />
+                <div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 4, lineHeight: 1.3 }}>
+                    {item.title}
+                  </div>
+                  <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>
+                    {item.desc}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA button */}
+          <button style={{
+            width: '100%', padding: '18px 0', background: '#fff', color: '#000',
+            border: 'none', borderRadius: 9999, fontSize: 16, fontWeight: 700,
+            fontFamily: "'Inter',sans-serif", cursor: 'pointer',
+          }}>
+            Connect your agent
+          </button>
+        </div>
+
+        {/* Bottom nav */}
+        <div style={{
+          position: 'fixed', bottom: 0, left: '50%', transform: 'translateX(-50%)',
+          width: '100%', maxWidth: 480, background: '#000',
+          borderTop: '1px solid rgba(255,255,255,0.07)',
+          display: 'flex', justifyContent: 'space-around', alignItems: 'center',
+          padding: '12px 24px 28px', zIndex: 100,
+        }}>
+          {['chart', 'target', 'search', 'person'].map(id => (
+            <button key={id} onClick={() => setActiveNav(id)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 12px' }}>
+              {navIcon(id)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default function App() {
+  return <AgenticTradingScreen />;
 }
